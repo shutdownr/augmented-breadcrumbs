@@ -13,6 +13,8 @@
 		22AA3CD52285843000137F54 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22AA3CD32285843000137F54 /* Main.storyboard */; };
 		22AA3CD72285843100137F54 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 22AA3CD62285843100137F54 /* Assets.xcassets */; };
 		22AA3CDA2285843100137F54 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22AA3CD82285843100137F54 /* LaunchScreen.storyboard */; };
+		22AA3CE2228584DB00137F54 /* LocationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22AA3CE1228584DB00137F54 /* LocationHelper.swift */; };
+		79CDEB801C3656ECAD1564E8 /* Pods_AugmentedBreadcrumbs.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E60E4E784FC16DB9D0130D34 /* Pods_AugmentedBreadcrumbs.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +26,10 @@
 		22AA3CD62285843100137F54 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		22AA3CD92285843100137F54 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		22AA3CDB2285843100137F54 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		22AA3CE1228584DB00137F54 /* LocationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationHelper.swift; sourceTree = "<group>"; };
+		4DC68C8847ECA7EDF1DD3750 /* Pods-AugmentedBreadcrumbs.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AugmentedBreadcrumbs.release.xcconfig"; path = "Target Support Files/Pods-AugmentedBreadcrumbs/Pods-AugmentedBreadcrumbs.release.xcconfig"; sourceTree = "<group>"; };
+		AAD1EE535771303FAAA29494 /* Pods-AugmentedBreadcrumbs.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AugmentedBreadcrumbs.debug.xcconfig"; path = "Target Support Files/Pods-AugmentedBreadcrumbs/Pods-AugmentedBreadcrumbs.debug.xcconfig"; sourceTree = "<group>"; };
+		E60E4E784FC16DB9D0130D34 /* Pods_AugmentedBreadcrumbs.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AugmentedBreadcrumbs.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,6 +37,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				79CDEB801C3656ECAD1564E8 /* Pods_AugmentedBreadcrumbs.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -42,6 +49,8 @@
 			children = (
 				22AA3CCC2285843000137F54 /* AugmentedBreadcrumbs */,
 				22AA3CCB2285843000137F54 /* Products */,
+				2F8518F41739EE3A5055AEEB /* Pods */,
+				5F6759C4BF1694DA2C3E7E3B /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -63,8 +72,27 @@
 				22AA3CD62285843100137F54 /* Assets.xcassets */,
 				22AA3CD82285843100137F54 /* LaunchScreen.storyboard */,
 				22AA3CDB2285843100137F54 /* Info.plist */,
+				22AA3CE1228584DB00137F54 /* LocationHelper.swift */,
 			);
 			path = AugmentedBreadcrumbs;
+			sourceTree = "<group>";
+		};
+		2F8518F41739EE3A5055AEEB /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				AAD1EE535771303FAAA29494 /* Pods-AugmentedBreadcrumbs.debug.xcconfig */,
+				4DC68C8847ECA7EDF1DD3750 /* Pods-AugmentedBreadcrumbs.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		5F6759C4BF1694DA2C3E7E3B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E60E4E784FC16DB9D0130D34 /* Pods_AugmentedBreadcrumbs.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -74,9 +102,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 22AA3CDE2285843100137F54 /* Build configuration list for PBXNativeTarget "AugmentedBreadcrumbs" */;
 			buildPhases = (
+				EE0FABADDE661F557B0E68A4 /* [CP] Check Pods Manifest.lock */,
 				22AA3CC62285843000137F54 /* Sources */,
 				22AA3CC72285843000137F54 /* Frameworks */,
 				22AA3CC82285843000137F54 /* Resources */,
+				2E430DE2A3389F14A34ED994 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -134,11 +164,61 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		2E430DE2A3389F14A34ED994 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AugmentedBreadcrumbs/Pods-AugmentedBreadcrumbs-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/HCKalmanFilter/HCKalmanFilter.framework",
+				"${BUILT_PRODUCTS_DIR}/Surge/Surge.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HCKalmanFilter.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Surge.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AugmentedBreadcrumbs/Pods-AugmentedBreadcrumbs-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EE0FABADDE661F557B0E68A4 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-AugmentedBreadcrumbs-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		22AA3CC62285843000137F54 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22AA3CE2228584DB00137F54 /* LocationHelper.swift in Sources */,
 				22AA3CD22285843000137F54 /* ViewController.swift in Sources */,
 				22AA3CCE2285843000137F54 /* AppDelegate.swift in Sources */,
 			);
@@ -284,6 +364,7 @@
 		};
 		22AA3CDF2285843100137F54 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AAD1EE535771303FAAA29494 /* Pods-AugmentedBreadcrumbs.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -302,6 +383,7 @@
 		};
 		22AA3CE02285843100137F54 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4DC68C8847ECA7EDF1DD3750 /* Pods-AugmentedBreadcrumbs.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;

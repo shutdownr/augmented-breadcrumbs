@@ -9,41 +9,39 @@
 import UIKit
 import SceneKit
 import ARKit
+import CoreLocation
 
 class ViewController: UIViewController, ARSCNViewDelegate {
 
     @IBOutlet var sceneView: ARSCNView!
+    private var locationHelper : LocationHelper!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        locationHelper = LocationHelper(onHeadingUpdated: onHeadingUpdate, onLocationUpdated: onLocationUpdate)
         
-        // Set the view's delegate
         sceneView.delegate = self
-        
-        // Show statistics such as fps and timing information
         sceneView.showsStatistics = true
-        
-        // Create a new scene
         let scene = SCNScene(named: "art.scnassets/ship.scn")!
-        
-        // Set the scene to the view
         sceneView.scene = scene
+    }
+    
+    func onHeadingUpdate(heading: Double) {
+        print("Heading: \(heading)")
+    }
+    
+    func onLocationUpdate(location: CLLocation) {
+        print("Location: \(location.coordinate.latitude) \(location.coordinate.longitude)")
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        // Create a session configuration
         let configuration = ARWorldTrackingConfiguration()
-
-        // Run the view's session
         sceneView.session.run(configuration)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
-        // Pause the view's session
         sceneView.session.pause()
     }
 

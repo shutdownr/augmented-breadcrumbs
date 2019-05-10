@@ -1,0 +1,4 @@
+target 'AugmentedBreadcrumbs' do
+  use_frameworks!
+  pod 'HCKalmanFilter'
+end
