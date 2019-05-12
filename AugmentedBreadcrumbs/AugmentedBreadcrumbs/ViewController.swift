@@ -35,15 +35,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         let scene = SCNScene(named: "art.scnassets/ship.scn")!
         sceneView.scene = scene
         sceneView.session.delegate = self
-        print("Initial: ")
-        if let cf = sceneView.session.currentFrame {
-            print("0: \(cf.camera.transform.columns.0)")
-            print("1: \(cf.camera.transform.columns.1)")
-            print("2: \(cf.camera.transform.columns.2)")
-            print("3: \(cf.camera.transform.columns.3)")
-        }
-        print("#########")
-        
         
         for i in 0...2 {
             let breadcrumb = SCNNode(geometry: SCNBox(width: 0.5, height: 0.5, length: 0.5, chamferRadius: 0.05))
@@ -78,10 +69,11 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
     }
     
+    private var first = true
     func updateBreadcrumbs() {
         if frozen { return }
-        guard let heading = myHeading, let goalPos = goalPosition else { return }
-        var myPos = CLLocation(latitude: 49.7, longitude: 12)
+        guard let heading = myHeading, var myPos = myPosition, let goalPos = goalPosition else { return }
+        myPos = CLLocation(latitude: 51, longitude: 12)
         let xzTotalDistance = myPos.getXZDistance(location: goalPos, currentHeading: heading)
         let distance = myPos.distance(from: goalPos)
         if distance < 10 {
@@ -95,24 +87,35 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         let relativeDistance = 2 / distance
         let relativeX = relativeDistance * xzTotalDistance.x
         let relativeZ = relativeDistance * xzTotalDistance.z
-        debug.text = "distance: \(distance) \nrelativeDistance \(relativeDistance)\nX \(xzTotalDistance.x)\nZ \(xzTotalDistance.z)"
-        if let camPos = cameraPosition {
-            var newWorldOrigin = simd_float4x4(
-                float4(x: camPos.columns.0.x, y: camPos.columns.0.y, z: camPos.columns.0.z, w: 0),
-                float4(x: camPos.columns.1.x, y: camPos.columns.1.y, z: camPos.columns.1.z, w: 0),
-                float4(x: camPos.columns.2.x, y: camPos.columns.2.y, z: camPos.columns.2.z, w: 0),
-                float4(x: camPos.columns.3.x, y: camPos.columns.3.y, z: camPos.columns.3.z, w: 1)
-            )
-            let angle = 1.5 * Float.pi
-            newWorldOrigin *= simd_float4x4(
-                float4(x: cos(angle), y: -sin(angle), z: 0, w: 0),
-                float4(x: sin(angle), y: cos(angle), z: 0, w: 0),
-                float4(x: 0, y: 0, z: 1, w: 0),
-                float4(x: 0, y: 0, z: 0, w: 1)
-            )
-            sceneView.session.setWorldOrigin(relativeTransform: newWorldOrigin)
-        }
+        guard let camPos = cameraPosition else { return }
         
+        //var yAngle = Float.pi - atan2f( (2*q.y*q.w)-(2*q.x*q.z), 1-(2*pow(q.y,2))-(2*pow(q.z,2)))
+        var yAngle = asin(camPos.columns.2.x) // Get y rotation angle
+        if yAngle < (2/3) * .pi || yAngle > (4/3) * .pi { // exclude irrelevant angles (also filters first few callbacks, which are nonsense)
+            return
+        }
+        yAngle += .pi // Rotate 180 degrees around y
+        
+        // Gets camera translation only
+        var newWorldOrigin = simd_float4x4(
+            float4(x: 1, y: 0, z: 0, w: 0),
+            float4(x: 0, y: 1, z: 0, w: 0),
+            float4(x: 0, y: 0, z: 1, w: 0),
+            float4(x: camPos.columns.3.x, y: camPos.columns.3.y, z: camPos.columns.3.z, w: 1)
+        )
+        
+        // Applies y-rotation only
+        newWorldOrigin *= simd_float4x4(
+            float4(x: cos(yAngle), y: 0, z: sin(yAngle), w: 0),
+            float4(x: 0, y: 1, z: 0, w: 0),
+            float4(x: -sin(yAngle), y: 0, z: cos(yAngle), w: 0),
+            float4(x: 0, y: 0, z: 0, w: 1)
+        )
+
+        // Set new world origin
+        sceneView.session.setWorldOrigin(relativeTransform: newWorldOrigin)
+
+        // Update breadcrumbs based on relative distance in x and z (y is equal to camera)
         for breadcrumb in breadcrumbs.enumerated() {
             breadcrumb.element.position = SCNVector3(relativeX * Double(breadcrumb.offset + 1), 0, relativeZ * Double(breadcrumb.offset + 1))
             if breadcrumb.element.isHidden {
