@@ -19,9 +19,7 @@ extension CLLocation{
         let y = sin(dLon) * cos(lat2)
         let x = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(dLon)
         let radiansBearing = atan2(y, x)
-        var degrees = DegreeHelper.radiansToDegrees(radians: radiansBearing)
-        degrees = (degrees + 180).truncatingRemainder(dividingBy: 360)
-        return degrees
+        return radiansBearing
     }
     
     func getXZDistance(location: CLLocation, currentHeading: Double) -> (x: Double, z: Double) {
