@@ -15,6 +15,7 @@
 		22AA3CDA2285843100137F54 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22AA3CD82285843100137F54 /* LaunchScreen.storyboard */; };
 		22AA3CE2228584DB00137F54 /* LocationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22AA3CE1228584DB00137F54 /* LocationHelper.swift */; };
 		22AA3CE422858B3900137F54 /* LocationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22AA3CE322858B3900137F54 /* LocationExtension.swift */; };
+		22AA3CEA2289B0D200137F54 /* MatrixCalc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22AA3CE92289B0D200137F54 /* MatrixCalc.swift */; };
 		79CDEB801C3656ECAD1564E8 /* Pods_AugmentedBreadcrumbs.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E60E4E784FC16DB9D0130D34 /* Pods_AugmentedBreadcrumbs.framework */; };
 /* End PBXBuildFile section */
 
@@ -29,6 +30,7 @@
 		22AA3CDB2285843100137F54 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		22AA3CE1228584DB00137F54 /* LocationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationHelper.swift; sourceTree = "<group>"; };
 		22AA3CE322858B3900137F54 /* LocationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationExtension.swift; sourceTree = "<group>"; };
+		22AA3CE92289B0D200137F54 /* MatrixCalc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixCalc.swift; sourceTree = "<group>"; };
 		4DC68C8847ECA7EDF1DD3750 /* Pods-AugmentedBreadcrumbs.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AugmentedBreadcrumbs.release.xcconfig"; path = "Target Support Files/Pods-AugmentedBreadcrumbs/Pods-AugmentedBreadcrumbs.release.xcconfig"; sourceTree = "<group>"; };
 		AAD1EE535771303FAAA29494 /* Pods-AugmentedBreadcrumbs.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AugmentedBreadcrumbs.debug.xcconfig"; path = "Target Support Files/Pods-AugmentedBreadcrumbs/Pods-AugmentedBreadcrumbs.debug.xcconfig"; sourceTree = "<group>"; };
 		E60E4E784FC16DB9D0130D34 /* Pods_AugmentedBreadcrumbs.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AugmentedBreadcrumbs.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -76,6 +78,7 @@
 				22AA3CDB2285843100137F54 /* Info.plist */,
 				22AA3CE1228584DB00137F54 /* LocationHelper.swift */,
 				22AA3CE322858B3900137F54 /* LocationExtension.swift */,
+				22AA3CE92289B0D200137F54 /* MatrixCalc.swift */,
 			);
 			path = AugmentedBreadcrumbs;
 			sourceTree = "<group>";
@@ -221,6 +224,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				22AA3CE422858B3900137F54 /* LocationExtension.swift in Sources */,
+				22AA3CEA2289B0D200137F54 /* MatrixCalc.swift in Sources */,
 				22AA3CE2228584DB00137F54 /* LocationHelper.swift in Sources */,
 				22AA3CD22285843000137F54 /* ViewController.swift in Sources */,
 				22AA3CCE2285843000137F54 /* AppDelegate.swift in Sources */,

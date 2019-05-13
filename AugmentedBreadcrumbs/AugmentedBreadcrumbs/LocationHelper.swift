@@ -13,30 +13,22 @@ import HCKalmanFilter
 class LocationHelper: NSObject, CLLocationManagerDelegate {
     
     private var locationManager: CLLocationManager
-    private var onHeadingUpdate: (Double) -> Void
     private var onLocationUpdate: (CLLocation) -> Void
     private var kalmanFilter: HCKalmanAlgorithm?
     public var resetKalmanFilter: Bool = false
     
-    init(onHeadingUpdated: @escaping (_ heading: Double) -> Void, onLocationUpdated: @escaping (_ position: CLLocation) -> Void) {
+    init(onLocationUpdated: @escaping (_ position: CLLocation) -> Void) {
         locationManager = CLLocationManager()
         
         if CLLocationManager.authorizationStatus() == .notDetermined || CLLocationManager.authorizationStatus() == .denied {
             locationManager.requestWhenInUseAuthorization()
         }
         
-        onHeadingUpdate = onHeadingUpdated
         onLocationUpdate = onLocationUpdated
-        
-        locationManager.startUpdatingHeading()
         locationManager.startUpdatingLocation()
         
         super.init()
         locationManager.delegate = self
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
-        onHeadingUpdate(newHeading.magneticHeading)
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {

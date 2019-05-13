@@ -11,7 +11,7 @@ import SceneKit
 import ARKit
 import CoreLocation
 
-class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
+class ViewController: UIViewController, ARSCNViewDelegate {
 
     @IBOutlet var sceneView: ARSCNView!
     @IBOutlet weak var freeze: UIButton!
@@ -19,35 +19,31 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     private var locationHelper : LocationHelper!
     private var myPosition: CLLocation?
-    private var myHeading: Double?
     private var goalPosition: CLLocation?
     private var breadcrumbs: [SCNNode] = []
     private var breadcrumbContainer: SCNNode!
     private var frozen = false
-    private var cameraPosition: simd_float4x4?
-    
-    @IBAction func reset(_ sender: Any) {
-        guard let pov = sceneView.pointOfView else { return }
-        breadcrumbContainer.position = pov.position
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        locationHelper = LocationHelper(onHeadingUpdated: onHeadingUpdate, onLocationUpdated: onLocationUpdate)
+        locationHelper = LocationHelper(onLocationUpdated: onLocationUpdate)
         
         sceneView.delegate = self
         sceneView.showsStatistics = true
         sceneView.debugOptions = [.showWorldOrigin]
         let scene = SCNScene(named: "art.scnassets/ship.scn")!
         sceneView.scene = scene
-        sceneView.session.delegate = self
         
         
         breadcrumbContainer = SCNNode(geometry: SCNSphere(radius: 0.01))
         breadcrumbContainer.name = "BreadcrumbContainer"
         
         for i in 0...3 {
-            let breadcrumb = SCNNode(geometry: SCNBox(width: 0.5, height: 0.5, length: 0.5, chamferRadius: 0.05))
+            let breadcrumbCone = SCNNode(geometry: SCNCone(topRadius: 0, bottomRadius: 0.15, height: 0.3))
+            breadcrumbCone.rotation = SCNVector4(0, 0, 1, -Double.pi/2)
+            breadcrumbCone.geometry?.firstMaterial?.diffuse.contents = UIColor.green
+            let breadcrumb = SCNNode(geometry: nil)
+            breadcrumb.addChildNode(breadcrumbCone)
             breadcrumb.name = "Breadcrumb \(i)"
             breadcrumb.isHidden = true
             
@@ -59,63 +55,20 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         goalPosition = CLLocation(latitude: 50.047094, longitude: 12.043262)
     }
-    
-    func onHeadingUpdate(heading: Double) {
-        myHeading = heading
-        updateBreadcrumbs()
-    }
-    
+
     func onLocationUpdate(location: CLLocation) {
         myPosition = location
-        //updateBreadcrumbs()
-    }
-    
-    @IBAction func freeze(_ sender: Any) {
-        frozen = !frozen
-        if frozen {
-            freeze.layer.borderColor = UIColor.cyan.cgColor
-            freeze.layer.borderWidth = 10
-        }
-        else {
-            freeze.layer.borderWidth = 0
-        }
-    }
-
-    func transformMatrix(matrix: simd_float4x4, myLocation: CLLocation, newLocation: CLLocation) -> simd_float4x4{
-        let distance = Float(newLocation.distance(from: myLocation))
-        let bearing = myLocation.angleTo(location: newLocation)
-        let position = vector_float4(0.0, 0.0, -distance, 0.0)
-        let translationMatrix = self.translationMatrix(with: matrix_identity_float4x4, for: position)
-        let rotationMatrix = rotateAroundY(with: matrix_identity_float4x4, for: Float(bearing + .pi))
-        let transformMatrix = simd_mul(rotationMatrix, translationMatrix)
-        return simd_mul(matrix, transformMatrix)
-    }
-    
-    func rotateAroundY(with matrix: matrix_float4x4, for degrees: Float) -> matrix_float4x4 {
-        var matrix : matrix_float4x4 = matrix
-        
-        matrix.columns.0.x = cos(degrees)
-        matrix.columns.0.z = -sin(degrees)
-        
-        matrix.columns.2.x = sin(degrees)
-        matrix.columns.2.z = cos(degrees)
-        return matrix.inverse
-    }
-    
-    func translationMatrix(with matrix: matrix_float4x4, for translation : vector_float4) -> matrix_float4x4 {
-        var matrix = matrix
-        matrix.columns.3 = translation
-        return matrix
+        updateBreadcrumbs()
     }
     
     func updateBreadcrumbs() {
         if frozen { return }
         guard let myPos = myPosition, let goalPos = goalPosition else { return }
         
-        let goalMatrix = transformMatrix(matrix: matrix_identity_float4x4, myLocation: myPos, newLocation: goalPos)
+        let goalMatrix = MatrixCalc.transformMatrix(matrix: matrix_identity_float4x4, myLocation: myPos, newLocation: goalPos)
         let goalVector = SCNVector3(goalMatrix.columns.3.x, 0, goalMatrix.columns.3.z)
         let distance = myPos.distance(from: goalPos)
-    
+        
         if distance < 10 {
             for breadcrumb in breadcrumbs {
                 breadcrumb.isHidden = true
@@ -128,7 +81,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         let relativeDistance = Float(2 / distance)
         let relativeX = relativeDistance * goalVector.x
         let relativeZ = relativeDistance * goalVector.z
-
+        
         // Update breadcrumbs based on relative distance in x and z (y is equal to camera)
         for breadcrumb in breadcrumbs.enumerated() {
             breadcrumb.element.position = SCNVector3(relativeX * Float(breadcrumb.offset + 1), 0, relativeZ * Float(breadcrumb.offset + 1))
@@ -138,6 +91,22 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 freeze.layer.borderColor = UIColor.green.cgColor
             }
         }
+    }
+    
+    @IBAction func freeze(_ sender: Any) {
+        frozen = !frozen
+        if frozen {
+            freeze.layer.borderColor = UIColor.cyan.cgColor
+            freeze.layer.borderWidth = 10
+        }
+        else {
+            freeze.layer.borderWidth = 0
+        }
+    }
+    
+    @IBAction func reset(_ sender: Any) {
+        guard let pov = sceneView.pointOfView else { return }
+        breadcrumbContainer.position = pov.position
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -154,10 +123,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 
     // MARK: - ARSCNViewDelegate
     
-    func session(_ session: ARSession, didUpdate frame: ARFrame) {
-        cameraPosition = frame.camera.transform
-    }
-    
     func session(_ session: ARSession, didFailWithError error: Error) {
         // Present an error message to the user
         
@@ -173,53 +138,3 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
     }
 }
-/*print("D")
- 
- var yAngle = asin(camPos.columns.2.x) // Get y rotation angle
- print(yAngle)
- debug.text = "\(yAngle)"
- /*
- if yAngle > (1/3) * .pi || yAngle < (-1/3) * .pi { // exclude irrelevant angles (also filters first few callbacks, which are nonsense)
- return
- }*/
- 
- print("E")
- if first {
- yAngle += .pi // Rotate 180 degrees around y
- first = false
- }
- 
- 
- 
- // Gets camera translation only
- /*var newWorldOrigin = simd_float4x4(
- float4(x: 1, y: 0, z: 0, w: 0),
- float4(x: 0, y: 1, z: 0, w: 0),
- float4(x: 0, y: 0, z: 1, w: 0),
- float4(x: camPos.columns.3.x, y: camPos.columns.3.y, z: camPos.columns.3.z, w: 1)
- )
- 
- // Applies y-rotation only
- newWorldOrigin *= simd_float4x4(
- float4(x: cos(yAngle), y: 0, z: sin(yAngle), w: 0),
- float4(x: 0, y: 1, z: 0, w: 0),
- float4(x: -sin(yAngle), y: 0, z: cos(yAngle), w: 0),
- float4(x: 0, y: 0, z: 0, w: 1)
- )*/
- 
- // Gets camera translation only
- var newContainerPos = simd_float4x4(
- float4(x: 1, y: 0, z: 0, w: 0),
- float4(x: 0, y: 1, z: 0, w: 0),
- float4(x: 0, y: 0, z: 1, w: 0),
- float4(x: camPos.columns.3.x, y: camPos.columns.3.y, z: camPos.columns.3.z, w: 1)
- )
- 
- // Applies y-rotation only
- newContainerPos *= simd_float4x4(
- float4(x: cos(yAngle), y: 0, z: sin(yAngle), w: 0),
- float4(x: 0, y: 1, z: 0, w: 0),
- float4(x: -sin(yAngle), y: 0, z: cos(yAngle), w: 0),
- float4(x: 0, y: 0, z: 0, w: 1)
- )
- */
