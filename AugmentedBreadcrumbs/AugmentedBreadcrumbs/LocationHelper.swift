@@ -33,7 +33,6 @@ class LocationHelper: NSObject, CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let loc = locations.last!
-        
         if kalmanFilter == nil {
             kalmanFilter = HCKalmanAlgorithm(initialLocation: loc)
             onLocationUpdate(loc)
@@ -42,9 +41,13 @@ class LocationHelper: NSObject, CLLocationManagerDelegate {
             if resetKalmanFilter {
                 kalmanFilter!.resetKalman(newStartLocation: loc)
                 resetKalmanFilter = false
+                onLocationUpdate(loc)
             }
             else {
                 let kalmanLocation = kalmanFilter!.processState(currentLocation: loc)
+                if kalmanLocation.coordinate.latitude.isNaN || kalmanLocation.coordinate.longitude.isNaN {
+                    resetKalmanFilter = true
+                }
                 onLocationUpdate(kalmanLocation)
             }
         }

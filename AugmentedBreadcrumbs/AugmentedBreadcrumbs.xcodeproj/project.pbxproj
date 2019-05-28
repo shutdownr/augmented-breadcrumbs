@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		225637BA229D8F31004EBB5C /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 225637B9229D8F31004EBB5C /* Settings.bundle */; };
 		22AA3CCE2285843000137F54 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22AA3CCD2285843000137F54 /* AppDelegate.swift */; };
 		22AA3CD02285843000137F54 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 22AA3CCF2285843000137F54 /* art.scnassets */; };
 		22AA3CD22285843000137F54 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22AA3CD12285843000137F54 /* ViewController.swift */; };
@@ -20,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		225637B9229D8F31004EBB5C /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		22AA3CCA2285843000137F54 /* AugmentedBreadcrumbs.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AugmentedBreadcrumbs.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		22AA3CCD2285843000137F54 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		22AA3CCF2285843000137F54 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
@@ -69,6 +71,7 @@
 		22AA3CCC2285843000137F54 /* AugmentedBreadcrumbs */ = {
 			isa = PBXGroup;
 			children = (
+				225637B9229D8F31004EBB5C /* Settings.bundle */,
 				22AA3CCD2285843000137F54 /* AppDelegate.swift */,
 				22AA3CCF2285843000137F54 /* art.scnassets */,
 				22AA3CD12285843000137F54 /* ViewController.swift */,
@@ -162,6 +165,7 @@
 			files = (
 				22AA3CD02285843000137F54 /* art.scnassets in Resources */,
 				22AA3CDA2285843100137F54 /* LaunchScreen.storyboard in Resources */,
+				225637BA229D8F31004EBB5C /* Settings.bundle in Resources */,
 				22AA3CD72285843100137F54 /* Assets.xcassets in Resources */,
 				22AA3CD52285843000137F54 /* Main.storyboard in Resources */,
 			);
