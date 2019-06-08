@@ -24,8 +24,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     private var breadcrumbContainer: SCNNode!
     private var goalNode: SCNNode!
     private var frozen = false
-    
-    
+
     //var positions = [CLLocation(latitude: 52.047094, longitude: 12.043262), CLLocation(latitude: 52.047094, longitude: 14.043262), CLLocation(latitude: 50.047094, longitude: 14.043262), CLLocation(latitude: 48.047094, longitude: 14.043262), CLLocation(latitude: 48.047094, longitude: 12.043262), CLLocation(latitude: 48.047094, longitude: 10.043262), CLLocation(latitude: 50.047094, longitude: 10.043262),CLLocation(latitude: 52.047094, longitude: 10.043262)]
     
     override func viewDidLoad() {
@@ -34,7 +33,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
         NotificationCenter.default.addObserver(self, selector: #selector(settingsUpdated), name: UserDefaults.didChangeNotification, object: nil)
 
-        goalPosition = CLLocation(latitude: 50.325696, longitude: 11.938760)
+        goalPosition = CLLocation(latitude: 50.047075, longitude: 12.042837)
         settingsUpdated()
         initARSession()
     }
@@ -61,17 +60,17 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             return
         }
 
-        debug.text = String(myPos.horizontalAccuracy)
         breadcrumbContainer.position = pov.position
         let goalMatrix = MatrixCalc.transformMatrix(matrix: matrix_identity_float4x4, myLocation: myPos, newLocation: goalPos)
         let goalVector = SCNVector3(goalMatrix.columns.3.x, 0, goalMatrix.columns.3.z)
         let distance = myPos.distance(from: goalPos)
-        
+        debug.text = String(distance)
+
         SCNTransaction.begin()
         SCNTransaction.animationDuration = 0.5
         SCNTransaction.animationTimingFunction = CAMediaTimingFunction(name: .easeOut)
         
-        goalNode.position = goalVector
+        goalNode.position = SCNVector3(goalVector.x, -3, goalVector.z)
 
         let freezeDistance = myPos.horizontalAccuracy > 10 ? 10 + myPos.horizontalAccuracy / 2 : 10
         
@@ -81,6 +80,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 freeze.layer.borderWidth = 10
                 freeze.layer.borderColor = UIColor.red.cgColor
             }
+            goalNode.isHidden = false
         }
         else {
             for breadcrumb in breadcrumbs {
@@ -88,6 +88,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 freeze.layer.borderWidth = 0
                 freeze.layer.borderColor = UIColor.green.cgColor
             }
+            goalNode.isHidden = true
         }
         
         let relativeDistance = Float(2 / distance)
@@ -136,8 +137,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             breadcrumbs.append(breadcrumb)
             breadcrumbContainer.addChildNode(breadcrumb)
         }
-
-        goalNode = SCNNode(geometry: SCNCylinder(radius: 0.5, height: 30))
+        goalNode = sceneView.scene.rootNode.childNode(withName: "goalCircle", recursively: true)
+        goalNode.isHidden = true
         breadcrumbContainer.addChildNode(goalNode)
 
         sceneView.scene.rootNode.addChildNode(breadcrumbContainer)
